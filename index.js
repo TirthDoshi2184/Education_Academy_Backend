@@ -1,30 +1,31 @@
+require('dotenv').config(); // Load environment variables
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors'); // Import cors
-require('dotenv').config();
-
+const cors = require('cors');
 const enquiryRoutes = require('./src/routes/EnquiryRoutes');
 
 const app = express();
 
-// ✅ Use cors middleware
+// Middleware
 app.use(cors({
-  origin: 'https://vidhyaeducation-8aa07.web.app', // Allow only your frontend origin
-  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+  origin: 'https://vidhyaeducation-8aa07.web.app', // Allow frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], 
+  allowedHeaders: ['Content-Type', 'Authorization'], 
+  credentials: true, // Allow credentials
 }));
+app.options('*', cors()); // Handle preflight requests
 
 app.use(express.json());
 
-app.options('*', cors()); // Handle preflight requests for all routes
+// MongoDB Connection
+const MONGO_URI = process.env.MONGO_URI; // Use Render Environment Variable
 
-// Connect to MongoDB
-mongoose.connect(process.env.MONGO_URI, {
+mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
 })
-.then(() => console.log('Connected to MongoDB'))
-.catch(err => console.error('MongoDB connection error:', err));
+.then(() => console.log('✅ Connected to MongoDB Atlas'))
+.catch(err => console.error('❌ MongoDB connection error:', err));
 
 // Routes
 app.use('/enquiries', enquiryRoutes);
@@ -32,5 +33,5 @@ app.use('/enquiries', enquiryRoutes);
 // Start server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
-  console.log(`Server is running on port ${PORT}`);
+  console.log(`🚀 Server is running on port ${PORT}`);
 });
