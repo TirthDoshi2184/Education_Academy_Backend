@@ -8,12 +8,12 @@ const enquiryRoutes = require('./src/routes/EnquiryRoutes');
 const app = express();
 
 // ✅ Correctly configure CORS middleware
-app.use(cors({
-  origin: 'https://vidhyaeducation-8aa07.web.app', // Allow requests from Firebase frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Allow necessary methods
-  allowedHeaders: ['Content-Type', 'Authorization'], // Allow required headers
-  credentials: true, // Allow credentials (if needed)
-}));
+app.use((req, res, next) => {
+  res.header("Access-Control-Allow-Origin", "*"); // Allows all origins (for testing)
+  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
+  next();
+});
 
 app.use(express.json());
 
