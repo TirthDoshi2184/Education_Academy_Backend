@@ -1,23 +1,24 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const cors = require('cors');
-require('dotenv').config(); // Load environment variables
+const cors = require('cors'); // Import cors
+require('dotenv').config();
 
 const enquiryRoutes = require('./src/routes/EnquiryRoutes');
 
 const app = express();
 
-// ✅ Correctly configure CORS middleware
-app.use((req, res, next) => {
-  res.header("Access-Control-Allow-Origin", "*"); // Allows all origins (for testing)
-  res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
-  res.header("Access-Control-Allow-Headers", "Content-Type, Authorization");
-  next();
-});
+// ✅ Use cors middleware
+app.use(cors({
+  origin: 'https://vidhyaeducation-8aa07.web.app', // Allow only your frontend origin
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // Allowed HTTP methods
+  allowedHeaders: ['Content-Type', 'Authorization'], // Allowed headers
+}));
 
 app.use(express.json());
 
-// ✅ Use environment variable for MongoDB
+app.options('*', cors()); // Handle preflight requests for all routes
+
+// Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true
