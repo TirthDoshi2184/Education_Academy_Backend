@@ -6,7 +6,6 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const enquiryRoutes = require("./src/routes/EnquiryRoutes");
-const paymentRoutes = require("./src/routes/PaymentRoute");
 
 const app = express();
 
@@ -49,7 +48,6 @@ mongoose
 
 // Routes
 app.use("/enquiries", enquiryRoutes);
-app.use("/payment", paymentRoutes);
 
 // Global Error Handler (Prevents Crashes)
 app.use((err, req, res, next) => {
